@@ -1,59 +1,97 @@
-# PpwAngular21
+# Práctica 01: Instalación y Configuración del Entorno - Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.9.
+## 📌 Información General
 
-## Development server
+- **Título:** Instalación y Configuración del Entorno
+- **Asignatura:** Programación y Plataformas Web
+- **Carrera:** Ingeniería en Computación
+- **Estudiante:** Carlos Antonio Gordillo Tenemaza
+- **Semestre:** 5to Semestre
 
-To start a local development server, run:
+---
 
+## 🛠️ Descripción
+
+Este proyecto consiste en la creación del proyecto incremental `ppw-angular-21` utilizando Angular 21, con routing habilitado y una estructura de carpetas basada en features. La aplicación sirve como una base inicial, limpia y mantenible, que no es un ejercicio aislado, sino el mismo proyecto que crecerá y se expandirá progresivamente en los módulos 02, 03, 04 y posteriores.
+
+Se configuró un entorno minimalista, eliminando el boilerplate por defecto de Angular CLI, simplificando el componente raíz y estableciendo estilos globales básicos.
+
+---
+
+## 💻 Fragmentos de Código Destacado
+
+### 1. Creación del proyecto base
+El comando inicial utilizado para generar la estructura con Angular CLI, forzando el uso de SCSS y deshabilitando Server Side Rendering (SSR):
 ```bash
-ng serve
+ng new ppw-angular-21 --routing --style=scss --ssr=false
+cd ppw-angular-21
+pnpm install
+pnpm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### 2. Configuración del Enrutamiento (app.routes.ts)
+Definición de la ruta inicial hacia `HomePage` y configuración de un `wildcard ()` para redirigir cualquier URL desconocida a la página principal, previniendo pantallas en blanco:
+```TypeScript
+import { Routes } from '@angular/router';
+import { HomePage } from './features/home/pages/home-page';
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+export const routes: Routes = [
+  {
+    path: '',
+    component: HomePage,
+  },
+  {
+    path: '**',
+    redirectTo: '',
+  },
+];
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
 
-```bash
-ng generate --help
+### 3. Simplificación del Componente Raíz (app.html y app.ts)
+Reducción del componente raíz para que funcione únicamente como un contenedor `(app-shell)` que renderiza el contenido dinámico a través de `RouterOutlet`:  
+```HTML
+<main class="app-shell">
+  <router-outlet />
+</main>
 ```
 
-## Building
 
-To build the project run:
+### 4. Configuración Global Standalone (app.config.ts)
+Uso de la API standalone de Angular 21 (sin `AppModule`) para proveer el enrutamiento y la detección de cambios de zona, preparando el archivo para futuros proveedores como `provideHttpClient`:   
+```TypeScript
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
 
-```bash
-ng build
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
+  ],
+};
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## 🧑‍💻 Capturas de Pantalla
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### 1. Versión de Angular
+**Descripción:** Salida del comando `ng version` en la terminal, validando que se está utilizando Angular CLI en su versión 21 o superior.
 
-```bash
-ng test
-```
+![Vista Angular](./src/assets/01-ng-version.png)
 
-## Running end-to-end tests
+### 2. Creación del Proyecto
+**Descripción:** Proceso de creación del proyecto en la terminal utilizando Angular CLI con los flags correspondientes para routing y estilos SCSS.
 
-For end-to-end (e2e) testing, run:
+![Vista Proyecto](./src/assets/02-ng-new.png)
 
-```bash
-ng e2e
-```
+### 3. Página de Inicio por Defecto
+**Descripción:** Captura de la página de bienvenida original generada por Angular CLI antes de realizar las modificaciones y la limpieza del boilerplate.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+![Vista Defecto](./src/assets/03-app-inicio.png)
 
-## Additional Resources
+### 4. HomePage Funcionando
+**Descripción:** Resultado final ejecutándose en `http://localhost:4200`, donde se observa el componente `HomePage` renderizado correctamente a través de la ruta raíz `/`.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+![Vista Funcionando](./src/assets/04-home-page.png)
