@@ -1,0 +1,37 @@
+<section>
+
+  <h1>{{ fullName() }}</h1>
+  <p>Edad: {{ age() }}</p>
+
+  <button type="button" (click)="changeData()">
+    Cambiar datos
+  </button>
+
+  @switch (ageCategory()) {
+    @case ('minor') {
+      <p>Categoría: Menor de edad</p>
+    }
+    @case ('young') {
+      <p>Categoría: Joven</p>
+    }
+    @case ('adult') {
+      <p>Categoría: Adulto</p>
+    }
+    @default {
+      <p>Categoría: Senior</p>
+    }
+  }
+
+  <h2>Habilidades</h2>
+
+  @if (skills().length > 0) {
+    <ul>
+      @for (skill of skills(); track skill) {
+        <li>{{ skill }}</li>
+      }
+    </ul>
+  } @else {
+    <p>No hay habilidades registradas.</p>
+  }
+
+</section>
